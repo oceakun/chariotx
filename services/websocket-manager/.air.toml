@@ -1,0 +1,21 @@
+# .air.toml configuration file
+# Path to watch for changes
+root = "."
+
+# Files to exclude from being watched
+exclude = [
+    "tmp",
+    "tests/integration/tmp",
+    "tmp/*"
+]
+
+# You can specify build and run commands if necessary
+[build]
+  cmd = "go build -o ./tmp/main cmd/main.go"
+  bin = "tmp/main"
+  exclude_dir = ["tmp"]
+  watch_dir = ["cmd", "internal", "pkg", "tests/integration"]
+
+[runner]
+  cmd = "./tmp/main"  # Path to the binary to run after the build
+  delay = 1000       # Milliseconds to wait before running after file change
