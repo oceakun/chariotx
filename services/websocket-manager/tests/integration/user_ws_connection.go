@@ -76,7 +76,7 @@ func main() {
 	// Keep listening for responses from server
 	go func() {
 		for {
-			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 			_, msg, err := conn.Read(ctx)
 			cancel()
 			if err != nil {
