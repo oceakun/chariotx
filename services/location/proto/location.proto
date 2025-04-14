@@ -1,0 +1,18 @@
+syntax = "proto3";
+package location;
+option go_package = "github.com/oceakun/chariotx/services/location/generated/locationpb";
+
+service LocationService {
+  rpc SendLocation(LocationData) returns (Ack);
+}
+
+message LocationData {
+  string user_id = 1;
+  double lat = 2;
+  double lng = 3;
+  int64 timestamp = 4;
+}
+
+message Ack {
+  bool success = 1;
+}
