@@ -10,7 +10,7 @@ import (
 
 // LocationData struct to store latitude and longitude
 type LocationData struct {
-	IP        string  `json:"ip"`
+	UserID        string  `json:"user_id"`
 	Lat       float64 `json:"lat"`
 	Lng       float64 `json:"lng"`
 	Timestamp float64 `json:"tmstmp"`

@@ -11,12 +11,14 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
 	"github.com/coder/websocket"
+	"github.com/google/uuid"
 )
 
 // LocationData represents mock location data
 type LocationData struct {
-	IP        string  `json:"ip"`
+	UserID        string  `json:"user_id"`
 	Lat       float64 `json:"lat"`
 	Lng       float64 `json:"lng"`
 	Timestamp float64 `json:"tmstmp"`
@@ -39,7 +41,7 @@ func main() {
 
 	// Mock location data with a dynamic timestamp
 	mockLocation := LocationData{
-		IP:  "192.168.1.101",
+		UserID:  uuid.New().String(),
 		Lat: 40.7128,
 		Lng: -74.0060,
 		Timestamp: float64(time.Now().Unix()), // Get the current timestamp

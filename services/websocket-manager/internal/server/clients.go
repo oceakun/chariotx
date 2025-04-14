@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"sync"
 
@@ -34,9 +35,10 @@ func InitRedisClient() {
 
 // Save WebSocket connection in Redis
 func CacheWsConnection(userID string, addr string) {
+	fmt.Println("caching the connected users info : ", userID, addr)
 	err := redisClient.Set(ctx, "ws:"+userID, addr, 0).Err()
 	if err != nil {
-		log.Println("Error saving connection:", err)
+		log.Println("Error saving connection to redis:", err)
 	}
 }
 

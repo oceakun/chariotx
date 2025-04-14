@@ -111,14 +111,14 @@ func (ws *WebSocketServer) readMessages(client *Client) {
 		// instead of storing locally, send the data to a Cassandra instance through the Location service
 
 		// Broadcast to all clients
-		ws.Broadcast <- []byte(fmt.Sprintf("User %s was at (%f, %f) at (%f)", location.IP, location.Lat, location.Lng, location.Timestamp))
+		// ws.Broadcast <- []byte(fmt.Sprintf("User %s was at (%f, %f) at (%f)", location.UserID, location.Lat, location.Lng, location.Timestamp))
 	}
 }
 
 // StoreLocationToFile logs locations in a file
 func StoreLocationToFile(location *LocationData) {
 	filePath := "user_locations.log"
-	entry := fmt.Sprintf("%s: (%f, %f, %f)\n", location.IP, location.Lat, location.Lng, location.Timestamp)
+	entry := fmt.Sprintf("%s: (%f, %f, %f)\n", location.UserID, location.Lat, location.Lng, location.Timestamp)
 
 	// Use os.OpenFile instead of undefined openFile
 	f, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
