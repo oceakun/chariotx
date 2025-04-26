@@ -1,10 +1,35 @@
-# A service usef to keep track of all the existing websocket sessions
+# 📍 Location Service
 
-## Client
-1. Emits regular location pings to the server containing longitude and latitude
-2. 
+## ⚙️ Setup Instructions
 
-## Server
-1. Tracks client IDs currently connected to the server by storing them in the redis instance
-2. Reads location pings from the client, stores in the cassandra instance and fetches as required by the location, map update, traffic update and graph processing services
-3. 
+### 1. Run Docker Compose
+
+```bash
+cd ./services/websocket-manager
+docker-compose up -d
+```
+
+### 2. Run Server
+
+```bash
+go mod tidy
+go run cmd/main.go
+```
+
+---
+
+## 🧪 Testing Instructions
+
+### 1. Run Client
+
+```bash
+go run tests/integration/user_ws_connection.go
+```
+
+### 2. Verify
+
+#### ✅ Check Redis
+
+```bash
+docker exec -it cassandra cqlsh -e "SELECT * FROM location.locations;"
+```

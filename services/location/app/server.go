@@ -9,7 +9,7 @@ import (
 )
 
 func StartGRPCServer() {
-    cassClient, err := NewCassandraClient([]string{"127.0.0.1"}, "chariotx")
+    cassClient, err := NewCassandraClient([]string{"127.0.0.1"}, "location_keyspace")
     if err != nil {
         log.Fatalf("Cassandra connection failed: %v", err)
     }
