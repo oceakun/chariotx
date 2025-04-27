@@ -1,6 +1,6 @@
-# 📍 Location Service
+# Location Service
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
 ### 1. Run Docker Compose
 
@@ -18,7 +18,7 @@ go run cmd/main.go
 
 ---
 
-## 🧪 Testing Instructions
+## Testing Instructions
 
 ### 1. Run Client
 
@@ -28,7 +28,7 @@ go run tests/integration/user_ws_connection.go
 
 ### 2. Verify
 
-#### ✅ Check Redis
+#### Check Redis
 
 ```bash
 docker exec -it cassandra cqlsh -e "SELECT * FROM location.locations;"

@@ -1,6 +1,6 @@
-# 📍 Location Service
+# Location Service
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
 ### 1. Run Docker Compose
 
@@ -32,7 +32,7 @@ go run main.go
 
 ---
 
-## 🧪 Testing Instructions
+## Testing Instructions
 
 ### 1. Run Client
 
@@ -42,11 +42,11 @@ go run client.go
 
 ### 2. Verify
 
-#### ✅ Check Kafka
+#### Check Kafka
 
 Open [http://localhost:9000](http://localhost:9000) (Kafdrop) and view the `location-updates` topic.
 
-#### ✅ Check Cassandra
+#### Check Cassandra
 
 ```bash
 docker exec -it cassandra cqlsh -e "SELECT * FROM location.locations;"
