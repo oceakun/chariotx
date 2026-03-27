@@ -3,10 +3,10 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o location .
+RUN go build -o graph-processing .
 
 FROM alpine:latest
 WORKDIR /root/
-COPY --from=builder /app/location .
-EXPOSE 50051
-CMD ["./location"]
+COPY --from=builder /app/graph-processing .
+EXPOSE 8080
+CMD ["./graph-processing"]

@@ -3,10 +3,10 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o location .
+RUN go build -o area-search .
 
 FROM alpine:latest
 WORKDIR /root/
-COPY --from=builder /app/location .
-EXPOSE 50051
-CMD ["./location"]
+COPY --from=builder /app/area-search .
+EXPOSE 8080
+CMD ["./area-search"]

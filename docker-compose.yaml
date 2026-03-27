@@ -1,0 +1,178 @@
+version: "3.8"
+services:
+
+  # ── Infrastructure ─────────────────────────────────────────────────────────
+
+  cassandra:
+    image: cassandra:4.1
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=chariotx-cluster
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    networks:
+      - chariotx-net
+    healthcheck:
+      test: ["CMD", "nodetool", "status"]
+      interval: 15s
+      timeout: 10s
+      retries: 15
+
+  cassandra-init:
+    image: cassandra:4.1
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    volumes:
+      - ./infra/cassandra-init.cql:/cassandra-init.cql:ro
+    command: cqlsh cassandra -f /cassandra-init.cql
+    networks:
+      - chariotx-net
+    restart: "no"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - chariotx-net
+
+  kafka:
+    image: confluentinc/cp-kafka:7.3.0
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - chariotx-net
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "kafka:29092"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+
+  kafka-init:
+    image: confluentinc/cp-kafka:7.3.0
+    depends_on:
+      kafka:
+        condition: service_healthy
+    command: >
+      kafka-topics --create
+        --topic location-pings
+        --partitions 1
+        --replication-factor 1
+        --if-not-exists
+        --bootstrap-server kafka:29092
+    networks:
+      - chariotx-net
+    restart: "no"
+
+  redis:
+    image: redis:7.2
+    container_name: redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - chariotx-net
+
+  # ── Application services ───────────────────────────────────────────────────
+
+  location:
+    build:
+      context: ./services/location
+    container_name: location
+    ports:
+      - "50051:50051"
+    environment:
+      - CASSANDRA_HOST=cassandra
+      - KAFKA_BROKER=kafka:29092
+    depends_on:
+      cassandra-init:
+        condition: service_completed_successfully
+      kafka-init:
+        condition: service_completed_successfully
+    networks:
+      - chariotx-net
+
+  area-search:
+    build:
+      context: ./services/area-search
+    container_name: area-search
+    ports:
+      - "8083:8080"
+    networks:
+      - chariotx-net
+
+  graph-processing:
+    build:
+      context: ./services/graph-processing
+    container_name: graph-processing
+    ports:
+      - "8084:8080"
+    environment:
+      - PORT=8080
+      - CASSANDRA_HOST=cassandra
+      - CASSANDRA_KEYSPACE=segment_keyspace
+    depends_on:
+      cassandra-init:
+        condition: service_completed_successfully
+    networks:
+      - chariotx-net
+
+  map:
+    build:
+      context: ./services/map
+    container_name: map
+    ports:
+      - "8081:8081"
+    networks:
+      - chariotx-net
+
+  websocket-manager:
+    build:
+      context: ./services/websocket-manager
+    container_name: websocket-manager
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - REDIS_ADDR=redis:6379
+    depends_on:
+      - redis
+    networks:
+      - chariotx-net
+
+  ui:
+    build:
+      context: ./ui
+    container_name: ui
+    ports:
+      - "3000:3000"
+    networks:
+      - chariotx-net
+
+volumes:
+  cassandra_data:
+  redis_data:
+
+networks:
+  chariotx-net:

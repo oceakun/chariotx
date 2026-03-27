@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"sync"
 
 	"github.com/redis/go-redis/v9"
@@ -27,8 +28,12 @@ func NewClientManager() *ClientManager {
 
 // Initialize Redis Client (called from main)
 func InitRedisClient() {
+	addr := os.Getenv("REDIS_ADDR")
+	if addr == "" {
+		addr = "localhost:6379"
+	}
 	redisClient = redis.NewClient(&redis.Options{
-		Addr: "localhost:6379", // Redis server address
+		Addr: addr,
 		DB:   0,
 	})
 }

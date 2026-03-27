@@ -3,18 +3,29 @@ package app
 import (
     "log"
     "net"
+    "os"
 
     pb "github.com/oceakun/chariotx/services/location/generated"
     "google.golang.org/grpc"
 )
 
+func getEnv(key, fallback string) string {
+    if v := os.Getenv(key); v != "" {
+        return v
+    }
+    return fallback
+}
+
 func StartGRPCServer() {
-    cassClient, err := NewCassandraClient([]string{"127.0.0.1"}, "location_keyspace")
+    cassHost := getEnv("CASSANDRA_HOST", "127.0.0.1")
+    kafkaBroker := getEnv("KAFKA_BROKER", "localhost:9092")
+
+    cassClient, err := NewCassandraClient([]string{cassHost}, "location_keyspace")
     if err != nil {
         log.Fatalf("Cassandra connection failed: %v", err)
     }
 
-    kafkaProducer := NewKafkaProducer("localhost:9092", "location-pings")
+    kafkaProducer := NewKafkaProducer(kafkaBroker, "location-pings")
 
     server := &LocationServiceServer{
         Cassandra: cassClient,
