@@ -165,6 +165,8 @@ services:
     build:
       context: ./ui
     container_name: ui
+    profiles:
+      - prod
     ports:
       - "3000:3000"
     networks:

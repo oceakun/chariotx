@@ -11,12 +11,12 @@ function Tracking({
   return (
     <button
       onClick={onClick}
-      className={`p-2 rounded-full transition hover:bg-black hover:cursor-pointer flex items-center justify-center${selected ? ' bg-black' : ''}`}
+      className={`p-4 rounded-md transition hover:bg-surface-selected cursor-pointer flex items-center justify-center${selected ? ' bg-surface-selected' : ''}`}
       aria-label='Track Package'
     >
       <MdDeliveryDining
         size={24}
-        className={`${selected ? 'text-violet-400' : 'text-violet-200'} hover:text-violet-400`}
+        className={`${selected ? 'text-tracking' : 'text-tracking-muted'} hover:text-tracking`}
       />
     </button>
   );

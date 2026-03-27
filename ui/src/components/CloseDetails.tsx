@@ -1,5 +1,4 @@
 import React from 'react';
-import { FiX } from 'react-icons/fi';
 import { IoMdCloseCircle } from 'react-icons/io';
 
 function CloseDetails({ handleClose }: { handleClose: () => void }) {
@@ -7,7 +6,7 @@ function CloseDetails({ handleClose }: { handleClose: () => void }) {
     <button
       aria-label='Close details'
       onClick={handleClose}
-      className='p-2 rounded-full hover:text-red-500 cursor-pointer transition flex items-center justify-center text-red-200'
+      className='p-2 rounded-full hover:text-close-hover cursor-pointer transition flex items-center justify-center text-close'
     >
       <IoMdCloseCircle size={24} />
     </button>

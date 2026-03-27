@@ -1,26 +1,164 @@
 @import 'tailwindcss';
 
+/* ── Dark mode defaults (base) ─────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Surfaces */
+  --surface: #272727;
+  --surface-selected: #1a1a1a;
+
+  /* Text */
+  --text: #ffffff;
+  --text-muted: #d1d5db;
+
+  /* Input */
+  --input-border: #454545;
+  --input-focus: #454545;
+  --input-bg: #000000;
+
+  /* Close button */
+  --close: #fecaca;
+  --close-hover: #ef4444;
+
+  /* Loading screen */
+  --loading-from: #15803d;
+  --loading-via: #60a5fa;
+  --loading-to: #fef08a;
+
+  /* Feature: Search */
+  --search: #facc15;
+  --search-muted: #fef08a;
+
+  /* Feature: Planner */
+  --planner: #22d3ee;
+  --planner-muted: #a5f3fc;
+
+  /* Feature: Cab */
+  --cab: #4ade80;
+  --cab-muted: #bbf7d0;
+
+  /* Feature: Estimate */
+  --estimate: #fb923c;
+  --estimate-muted: #fed7aa;
+
+  /* Feature: Tracking */
+  --tracking: #a78bfa;
+  --tracking-muted: #ddd6fe;
+  --tracking-note: #a5f3fc;
+}
+
+/* ── Light mode overrides ───────────────────────────────────────────────────── */
+html:not(.dark) {
+  /* Surfaces */
+  --surface: #ffffff;
+  --surface-selected: #ededed;
+
+  /* Text */
+  --text: #171717;
+  --text-muted: #6b7280;
+
+  /* Input */
+  --input-border: #e5e7eb;
+  --input-focus: #8a8a8a;
+  --input-bg: #ffffff;
+
+  /* Close button */
+  --close: #f87171;
+  --close-hover: #b91c1c;
+
+  /* Loading screen */
+  --loading-from: #15803d;
+  --loading-via: #3b82f6;
+  --loading-to: #fbbf24;
+
+  /* Feature: Search — darker for light bg contrast */
+  --search: #ca8a04;
+  --search-muted: #a16207;
+
+  /* Feature: Planner */
+  --planner: #0891b2;
+  --planner-muted: #0e7490;
+
+  /* Feature: Cab */
+  --cab: #16a34a;
+  --cab-muted: #15803d;
+
+  /* Feature: Estimate */
+  --estimate: #ea580c;
+  --estimate-muted: #c2410c;
+
+  /* Feature: Tracking */
+  --tracking: #7c3aed;
+  --tracking-muted: #6d28d9;
+  --tracking-note: #0891b2;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-surface: var(--surface);
+  --color-surface-selected: var(--surface-selected);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-input-border: var(--input-border);
+  --color-input-focus: var(--input-focus);
+  --color-input-bg: var(--input-bg);
+  --color-close: var(--close);
+  --color-close-hover: var(--close-hover);
+  --color-loading-from: var(--loading-from);
+  --color-loading-via: var(--loading-via);
+  --color-loading-to: var(--loading-to);
+  --color-search: var(--search);
+  --color-search-muted: var(--search-muted);
+  --color-planner: var(--planner);
+  --color-planner-muted: var(--planner-muted);
+  --color-cab: var(--cab);
+  --color-cab-muted: var(--cab-muted);
+  --color-estimate: var(--estimate);
+  --color-estimate-muted: var(--estimate-muted);
+  --color-tracking: var(--tracking);
+  --color-tracking-muted: var(--tracking-muted);
+  --color-tracking-note: var(--tracking-note);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background-color: var(--surface-selected);
+  color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.loading-gradient {
+  @apply bg-gradient-to-br from-loading-from via-loading-via to-loading-to;
+}
+
+@keyframes loading-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
+}
+
+.animate-loading-bar {
+  animation: loading-bar 1.4s ease-in-out infinite;
+}
+
+@keyframes error-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.animate-error-in {
+  animation: error-in 0.25s ease-out forwards;
+}
+
+.dark-map .leaflet-tile-pane {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
 }

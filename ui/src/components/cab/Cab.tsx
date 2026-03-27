@@ -9,12 +9,12 @@ const Cab = ({
 }) => (
   <button
     aria-label='Cab'
-    className={`p-2 rounded-full transition hover:bg-black hover:cursor-pointer flex items-center justify-center${selected ? ' bg-black' : ''}`}
+    className={`p-4 rounded-md transition hover:bg-surface-selected cursor-pointer flex items-center justify-center${selected ? ' bg-surface-selected' : ''}`}
     onClick={onClick}
   >
     <FaCarSide
       size={24}
-      className={`${selected ? 'text-green-400' : 'text-green-200'} hover:text-green-400`}
+      className={`${selected ? 'text-cab' : 'text-cab-muted'} hover:text-cab`}
     />
   </button>
 );

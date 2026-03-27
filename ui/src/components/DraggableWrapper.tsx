@@ -11,7 +11,9 @@ const DraggableWrapper: React.FC<DraggableWrapperProps> = ({ children }) => {
 
   return (
     <Draggable handle='.draggable-handle' nodeRef={nodeRef}>
-      <div ref={nodeRef}>{children}</div>
+      <div ref={nodeRef} className='inline-block'>
+        {children}
+      </div>
     </Draggable>
   );
 };

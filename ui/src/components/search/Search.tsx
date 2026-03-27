@@ -9,11 +9,11 @@ const Search: React.FC<{ onClick?: () => void; selected?: boolean }> = ({
     <button
       aria-label='Open search'
       onClick={onClick}
-      className={`p-2 rounded-full transition hover:bg-black cursor-pointer ${selected ? 'bg-black' : ''}`}
+      className={`p-4 rounded-md transition hover:bg-surface-selected cursor-pointer ${selected ? 'bg-surface-selected' : ''}`}
     >
       <FiSearch
         size={24}
-        className={`${selected ? 'text-yellow-400' : 'text-yellow-200'} hover:text-yellow-400`}
+        className={`${selected ? 'text-search' : 'text-search-muted'} hover:text-search`}
       />
     </button>
   );
